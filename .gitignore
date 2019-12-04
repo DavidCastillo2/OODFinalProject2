@@ -1,0 +1,5 @@
+
+.vscode/launch.json
+
+# Project exclude paths
+/src/Out/
