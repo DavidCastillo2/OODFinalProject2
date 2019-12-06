@@ -3,6 +3,7 @@ class MazeRobot{
     MazeLocation current_loc;
     ModelType the_model;
     int the_id;
+    boolean ready = true;
 
     ScanMethod scan;
     CheckCoin ch_coin;
@@ -24,7 +25,7 @@ class MazeRobot{
 	current_loc = loc;
     }
 
-    public void setCheckCoin(CheckCoin cc) {
+    public void setCheckCoin(CheckCoin cc){
 	ch_coin = cc;
     }
 
@@ -36,7 +37,7 @@ class MazeRobot{
 	scan = sc;
     }   
 
-    public void doScan(Maze the_maze, DarkMaze dark_maze){
+    public void doScan(Maze the_maze, Maze dark_maze){
 	scan.doScan(this, the_maze, dark_maze);
     }
 

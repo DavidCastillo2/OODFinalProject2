@@ -1,4 +1,7 @@
 package LepinskiEngine;
+
+// Requests that the robot move in a particular direction
+
 public class CommandMove implements Command{
     private Robot the_robot;
     private DirType direction;

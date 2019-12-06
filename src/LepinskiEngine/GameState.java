@@ -1,7 +1,8 @@
 package LepinskiEngine;
 //turns_remaining is the number of turns remaining until the end of the game
 
-//team_coins is the number of coins collected so far (starts at zero)
+//team_coins is the toal number points from collected coins
+//   ... Gold coins are worth one point and Diamond coins are worth 10 points
 //total_coins is the total number of coins available at the start of the game
 
 //Locations are numbered from 0 to max_size_x -1

@@ -2,10 +2,12 @@ package LepinskiEngine;
 import java.util.List;
 import java.util.ArrayList;
 
-public class ScanMethodNormal implements ScanMethod{
+//This implements Vision that is actually blocked by walls
+
+public class ScanMethodWalls implements ScanMethod{
     public int radius;
 
-    public ScanMethodNormal(int rad){
+    public ScanMethodWalls(int rad){
 	radius = rad;
     }
 
@@ -52,7 +54,7 @@ public class ScanMethodNormal implements ScanMethod{
 		dist_next.add(loc);
 
 		if ((loc.getObstacles() == null) || (!loc.getObstacles().contains(ObstacleType.Dark))){ 
-		    for(DirType d : DirType.values() ){
+		    for(DirType d : loc.getDirections() ){
 			MazeLocation neigh = findNeighbor(loc, d, the_maze);
 			if (neigh != null){
 			    dist_next.add(neigh);

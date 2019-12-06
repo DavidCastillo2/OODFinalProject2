@@ -6,15 +6,18 @@ class StandardExecution implements CommandExecution{
 
     public void executeCommands(Maze the_maze, List<Command> team_cmds, GameState the_state){
 
+	processFastMoves(team_cmds);
+	
 	executeMoves(the_maze, team_cmds);
 
-	updateRobotLocs(the_maze);
-
+	handleObstacles(the_maze, team_cmds);
+	
 	executePickUp(the_maze, team_cmds, the_state);
     
     }
 
     //This function changes the location inside each Maze Robot
+    //NO LONGER USED -- EXECUTE MOVES ALSO UPDATES LOCATION
     void updateRobotLocs(Maze the_maze){
 	int max_x = the_maze.getMaxX();
 	int max_y = the_maze.getMaxY();
@@ -31,6 +34,53 @@ class StandardExecution implements CommandExecution{
 	}
     }
 
+    void handleObstacles(Maze the_maze, List<Command> team_cmds){
+	List<Robot> bot_list = new ArrayList<Robot>();
+	MazeLocation new_loc;
+	MazeRobot m_bot;
+
+	for( Command cmd : team_cmds ){
+	    bot_list.add(cmd.getRobot());
+	}
+
+	for( Robot bot : bot_list){
+	    m_bot = the_maze.getRobot(bot.getID());
+	    new_loc = m_bot.getCurrentLoc();
+	    
+	    if ((new_loc.getObstacles() != null) && new_loc.getObstacles().contains(ObstacleType.Slow)){
+		if (nearbyEscort(new_loc, the_maze) == false){
+		    m_bot.ready = false;
+		}
+	    }
+	}
+    }
+    
+    void processFastMoves(List<Command> team_cmds){
+	List<Command> fast_cmds = new ArrayList<Command>();
+	
+	for (Command cmd : team_cmds){
+	    if (cmd instanceof CommandFastMove){
+		CommandFastMove cmd_fm = (CommandFastMove) cmd;
+		Robot rob = cmd.getRobot();
+		if (rob.getModel() == ModelType.FastBot){
+		    Command cmd1 = cmd_fm.getCmd1();
+		    Command cmd2 = cmd_fm.getCmd2();
+		    if ((cmd1 instanceof CommandMove) || (cmd1 instanceof CommandCoin)){
+			fast_cmds.add(cmd1);
+		    }
+		    if ((cmd2 instanceof CommandMove) || (cmd2 instanceof CommandCoin)){
+			fast_cmds.add(cmd2);
+		    }
+		}
+	    }
+	}
+
+	for (Command c : fast_cmds){
+	    team_cmds.add(c);
+	}
+	
+    }
+    
     void executeMoves(Maze the_maze, List<Command> team_cmds){
 	MazeRobot cur_bot;
 	CommandMove cur_move;
@@ -63,7 +113,8 @@ class StandardExecution implements CommandExecution{
 	}
     }
 
-    //This code changes the Maze but not the Location in the Robot
+    //This code changes the Maze
+    //Now Also changes the Location in the Robot
     void moveRobot(MazeRobot bot, Maze the_maze, CommandMove cmd){
 	MazeLocation old_loc = bot.getCurrentLoc();
 
@@ -89,7 +140,37 @@ class StandardExecution implements CommandExecution{
 	    }
 	    new_loc.getRobots().add(bot);
 	    old_loc.getRobots().remove(bot);
+
+	    //Now also updates the bot's location
+	    bot.setCurrentLoc(new_loc);
+
 	}
+    }
+
+    boolean nearbyEscort(MazeLocation loc, Maze the_maze){
+	int x = loc.getX();
+	int y = loc.getY();
+	boolean ans = false;
+	List<MazeLocation> loc_list = new ArrayList<MazeLocation>();
+
+	loc_list.add(loc);
+	loc_list.add(the_maze.getLocation(x-1, y));
+	loc_list.add(the_maze.getLocation(x+1, y));
+	loc_list.add(the_maze.getLocation(x, y-1));
+	loc_list.add(the_maze.getLocation(x, y+1));
+
+	for(MazeLocation near : loc_list){
+	    if (near != null){
+		if (near.getRobots() != null) {
+		    for(MazeRobot bot : near.getRobots() ){
+			if(bot.getModel() == ModelType.EscortBot){
+			    ans = true;
+			}
+		    }
+		}
+	    }
+	}
+	return ans;
     }
 	    
     void executePickUp(Maze the_maze, List<Command> team_cmds, GameState state){
@@ -113,7 +194,7 @@ class StandardExecution implements CommandExecution{
 	    for(CoinType c : coins){
 		if(bot.legalCoin(c)){
 		    pick.add(c);
-		    state.team_coins = state.team_coins + 1;
+		    state.team_coins = state.team_coins + coinValue(c);
 		}
 	    }
 
@@ -122,5 +203,13 @@ class StandardExecution implements CommandExecution{
 	    }
 		    
 	}
+    }
+
+    int coinValue(CoinType c){
+	int val = 1;
+	if (c == CoinType.Diamond){
+	    val = 10;
+	}
+	return val;
     }
 }

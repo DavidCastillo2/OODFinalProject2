@@ -1,4 +1,7 @@
 package LepinskiEngine;
+
+// Requests that the robot pick up any coins in its current location
+
 public class CommandCoin implements Command{
     private Robot the_robot;
 

@@ -20,6 +20,7 @@ public class Location{
     List<CoinType> the_coins;
     List<Robot> the_robots;
     List<DirType> the_directions;
+    List<ObstacleType> the_obstacles;
     int x_coord;
     int y_coord;
     boolean is_start;
@@ -35,6 +36,10 @@ public class Location{
 
     public List<DirType> getDirections(){
 	return the_directions;
+    }
+
+    public List<ObstacleType> getObstacles(){
+	return the_obstacles;
     }
 
     public int getX(){
@@ -57,12 +62,16 @@ public class Location{
 	the_coins = coins;
     }
 
-    public void setTheDirs(List<DirType> directions){
+    void setTheDirs(List<DirType> directions){
 	the_directions = directions;
     }
 
     void setTheRobots(List<Robot> robots){
 	the_robots = robots;
+    }
+
+    void setTheObstacles(List<ObstacleType> obs){
+	the_obstacles = obs;
     }
 
     void setScanned(boolean b){
@@ -85,6 +94,7 @@ public class Location{
 
     //Transform a Location into a MazeLocation 
     //Note: Currently does only a shallow copy of Coins
+
     public Location(MazeLocation loc){
 	x_coord = loc.getX();
 	y_coord = loc.getY();
@@ -92,6 +102,7 @@ public class Location{
 	is_start = loc.isTeamStart();
 	the_coins = loc.getCoins();
 	the_directions = loc.getDirections();
+	the_obstacles = loc.getObstacles();
 	
 	if (loc.getRobots() != null){
 	    the_robots = new ArrayList<Robot>();
@@ -100,6 +111,7 @@ public class Location{
 		the_robots.add(temp_bot);
 	    }
 	}
-    }		 
+    }	
+	 
 
 }

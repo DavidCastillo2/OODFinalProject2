@@ -77,12 +77,17 @@ public class MazeDisplayGraphics{
 	    }
 	}
 
+	if((loc.getObstacles() != null) && (loc.getObstacles().size()>0)){
+	    displayObstacles(loc.getObstacles(), x, y);
+	}
+	
 	if((loc.getRobots() != null) && (loc.getRobots().size()>0)){
 	    displayRobots(loc.getRobots(), x, y);
 	}
 	if((loc.getCoins() != null) && (loc.getCoins().size()>0)){
 	    displayCoins(loc.getCoins(), x, y);
 	}
+
     }
 
     static void displayRobots(List<MazeRobot> bots, double x, double y){
@@ -106,6 +111,8 @@ public class MazeDisplayGraphics{
 	    switch(c){
 	    case Gold: gc.setFill(Color.YELLOW);
 		break;
+	    case Diamond: gc.setFill(Color.BLUE);
+		break;
 	    }
 	    gc.fillOval(x+dx, y+dy, 12, 12);
 	    gc.strokeArc(x+dx, y+dy, 12, 12, 0, 360, ArcType.OPEN);
@@ -114,7 +121,19 @@ public class MazeDisplayGraphics{
     
     }
 
-
+    static void displayObstacles(List<ObstacleType> lst_obs, double x, double y){
+	for(ObstacleType ob : lst_obs){
+	    switch(ob){
+		case Stone: gc.setFill(Color.BLACK);
+		    break;
+		case Dark: gc.setFill(Color.GREY);
+		    break;
+		case Slow: gc.setFill(Color.BROWN);
+		    break;
+	    }
+	    gc.fillRect(x+2,y+2,BOX_WIDE-4, BOX_TALL-4);
+	}
+    }
 
     static String robotSymb(MazeRobot bot){
 	ModelType model = bot.getModel();
@@ -122,6 +141,11 @@ public class MazeDisplayGraphics{
 	switch(model){
 	case ScoutBot: return new String("S");
 	case CoinBot:  return new String("C");
+	case FastBot:  return new String("F");
+	case EscortBot: return new String("E");
+	case BasicBot:  return new String("B");
+	case GhostBot:  return new String("G");
+	case VisionBot: return new String("V");
 	}    
 
 	return new String("?");
