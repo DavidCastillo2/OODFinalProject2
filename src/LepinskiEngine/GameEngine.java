@@ -1,6 +1,8 @@
 package LepinskiEngine;
 import java.util.List;
 import java.util.ArrayList;
+
+import hivemind.*;
 import javafx.util.Duration;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
@@ -10,7 +12,6 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -24,7 +25,7 @@ public class GameEngine extends Application{
     final int NUM_DARK = 8;
 	
     final String team_name = "Test Team";
-    final double DELAY_TIME = 2.0;
+    final double DELAY_TIME = 0.2; // 2.0 default
     final String maze_file = "example1.maze";
 
     PlayerSearchingTeam the_team;
@@ -38,8 +39,8 @@ public class GameEngine extends Application{
 
     //You can Change TestTeam to be another class you create
     public GameEngine(){
-	the_team = new TestTeam();
-	other_team = new TestTeam();
+	the_team =  new GLaDOSSearching(); // TestTeam
+	other_team = new GLaDOS();
 	execution = new StandardExecution();
     }
     

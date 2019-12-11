@@ -62,7 +62,7 @@ public class Location{
 	the_coins = coins;
     }
 
-    void setTheDirs(List<DirType> directions){
+    public void setTheDirs(List<DirType> directions){
 	the_directions = directions;
     }
 

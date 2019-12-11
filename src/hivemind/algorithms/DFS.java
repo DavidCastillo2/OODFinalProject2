@@ -38,11 +38,11 @@ public class DFS {
         return output;
     }
 
-    public static LinkedList<Location> dfs(Location spawn, RectMaze maze, Location target) {
-        return dfs(spawn, maze);
+    public static LinkedList<Location> dfs(int spawnX, int spawnY, RectMaze maze, Location target) {
+        return dfs(spawnX, spawnY, maze);
     }
 
-    public static LinkedList<Location> dfs(Location spawn, RectMaze maze) {
+    public static LinkedList<Location> dfs(int spawnX, int spawnY, RectMaze maze) {
         DFSLocation[][] mazeGrid = new DFSLocation[maze.getMaxX()][maze.getMaxY()];
         // assume the maze is non-empty
         for (int x = 0; x < mazeGrid.length; x++) {
@@ -53,7 +53,7 @@ public class DFS {
                 mazeGrid[x][y] = current;
             }
         }
-        DFSLocation dfsSpawn = mazeGrid[spawn.getX()][spawn.getY()];
+        DFSLocation dfsSpawn = mazeGrid[spawnX][spawnY];
         LinkedList<DFSLocation> stack = new LinkedList<DFSLocation>();
         LinkedList<Location> longestPath = new LinkedList<Location>();
         stack.push(dfsSpawn);

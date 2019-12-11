@@ -40,6 +40,9 @@ public class TestingPlace {
             }
         }
 
+
+
+        /*
         printMaze(testMaze);
         outPut = scoutalg.getMove(0,0);
         System.out.println("OutPut Size : " + outPut.size());
@@ -49,6 +52,14 @@ public class TestingPlace {
         BFS myBFS = new BFS();
         //System.out.println(myBFS.bfs(ltn, 0,0,3,3));
         System.out.println("Test END\n");
+         */
+    }
+
+    public void printPath(LinkedList<Location> ll) {
+        System.out.println();
+        for (Location l : ll) {
+            System.out.print("(" + l.getX() + ", " + l.getY() + ") | ");
+        }
     }
 
     public void printMaze(Location[][] maze) {

@@ -35,6 +35,17 @@ public class CoinAlg3 implements Algorithm {
 
       // just getting the thing closest to the CoinBot
       LinkedList<Location> path = smallestPath(megaHolder);
+
+      // No Coins anywhere in vision
+      if (path.size() == 0) {
+        ScoutAlg scoutAlg = new ScoutAlg(maze);
+        LinkedList<Pair<DirType, Location>> options = scoutAlg.getMove(curX, curY);
+        if (options.size() > 2) {
+          options.remove();
+          options.remove();
+        }
+        return options;
+      }
       Pair<DirType, Location> closestToBot= getDir(curX, curY, path);
       retVal.add(closestToBot);
 
@@ -109,7 +120,11 @@ public class CoinAlg3 implements Algorithm {
             n.setParent(i);
             q.add(n);
             n.setSeen();
-            int numCoinsHere = n.getCoins().size();
+            int numCoinsHere = 0;
+            List<CoinType> CoinsHere = n.getCoins();
+            if (CoinsHere != null) {
+              numCoinsHere = CoinsHere.size();
+            }
             // if this position has more than one coin, we should have an edge of length
             // zero and recalculate (i.e. all outward edges will be identical)
             for (int c = 0; c < numCoinsHere; c++) {
